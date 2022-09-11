@@ -1,6 +1,7 @@
 package com.devabhi.currentlocation.services;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -36,8 +37,10 @@ public class LocationService extends Service {
             if (locationResult != null && locationResult.getLastLocation() != null) {
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
-                saveLocation(""+latitude, ""+longitude);
                 Log.d("LOCATIONS", latitude + ", " + longitude);
+//                saveLocation("" + latitude, "" + longitude);
+            } else {
+                Log.d("LOCATIONS", "Null locationResult");
             }
         }
     };
@@ -53,7 +56,7 @@ public class LocationService extends Service {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Intent resultIntent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getActivity(
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent.getActivity(
                 getApplicationContext(),
                 0,
                 resultIntent,
@@ -86,7 +89,7 @@ public class LocationService extends Service {
         }
 
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(4000);  // Interval in which you to get locations
+        locationRequest.setInterval(1000);  // Interval in which you to get locations
         locationRequest.setFastestInterval(2000);   // if location is available, sooner you can get it early
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
